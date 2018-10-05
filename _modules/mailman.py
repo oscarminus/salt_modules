@@ -19,7 +19,10 @@ MM_PATH = "/var/lib/mailman/bin"
 DEFAULT_OWNER = "root@localhost.localdomain"
 
 
-# Try to import Mailman helper, otherwise exit
+# Try to import Mailman helper. If it fails, continue.
+# As long as no function gets called, this doesn't hurt.
+# The __virtual__ function below causes, that this module gets
+# deactivated by salt on hosts, where mailman isn't installed.
 try:
     sys.path.append(MM_PATH)
     import paths
@@ -27,7 +30,7 @@ try:
     from Mailman import Utils
     from Mailman import MailList
 except ImportError:
-    sys.exit(1)
+    pass
 
 # This function is called by salt to check if this module is operational
 def __virtual__():
