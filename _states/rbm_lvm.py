@@ -40,8 +40,13 @@ def __virtual__():
     '''
     Only load the module if lvm is installed
     '''
-    if salt.utils.which('lvm'):
-        return 'rbm_lvm'
+
+    if int(__grains__['saltversioninfo'][0]) >= 2018:
+        if salt.utils.path.which('lvm'):
+            return 'rbm_lvm'
+    else:
+        if salt.utils.which('lvm'):
+            return 'rbm_lvm'
     return False
 
 

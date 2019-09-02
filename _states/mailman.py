@@ -28,8 +28,12 @@ def __virtual__():
     '''
     Only load the module if mailman is installed
     '''
-    if salt.utils.which('list_lists'):
-        return 'mailman'
+    if int(__grains__['saltversioninfo'][0]) >= 2018:
+        if salt.utils.path.which('list_lists'):
+            return 'mailman'
+    else:
+        if salt.utils.which('list_lists'):
+            return 'mailman'
     return False, 'It seems that mailman is not installed'
 
 ############################################################
